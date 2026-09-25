@@ -1,0 +1,20 @@
+# Node & Frontend Build
+frontend/node_modules/
+frontend/dist/
+frontend/.env.local
+
+# Java & Maven Build
+backend/target/
+backend/.mvn/wrapper/maven-wrapper.jar
+*.class
+
+# Python & SQLite Cache
+__pycache__/
+*.pyc
+backend/timetable.db
+
+# IDE & OS
+.vscode/
+.idea/
+*.DS_Store
+Thumbs.db

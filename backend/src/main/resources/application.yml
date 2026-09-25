@@ -1,0 +1,48 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /
+
+spring:
+  application:
+    name: smart-timetable-generator
+
+  datasource:
+    url: ${SPRING_DATASOURCE_URL:jdbc:h2:mem:timetable_db;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE;MODE=MySQL}
+    driver-class-name: ${SPRING_DATASOURCE_DRIVER:org.h2.Driver}
+    username: ${SPRING_DATASOURCE_USERNAME:sa}
+    password: ${SPRING_DATASOURCE_PASSWORD:}
+
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+
+  jpa:
+    defer-datasource-initialization: true
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.H2Dialect
+
+  sql:
+    init:
+      mode: always
+      continue-on-error: true
+
+jwt:
+  secret: 9a2f8c4e7b1d6f3a8e5c2b9a4f7d1e8c5b3a9f2e6d8c1b4a7f0e3d6c9b2a5f8e
+  expiration-ms: 86400000 # 24 Hours
+
+timetable:
+  periods-per-day: 8
+  days-per-week: 6 # Monday to Saturday
+
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
