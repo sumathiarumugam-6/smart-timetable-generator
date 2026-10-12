@@ -4,7 +4,6 @@ import com.smarttimetable.entity.*;
 import com.smarttimetable.enums.DayOfWeekEnum;
 import com.smarttimetable.enums.RoomType;
 import com.smarttimetable.enums.SubjectType;
-import com.smarttimetable.enums.TimetableStatus;
 import com.smarttimetable.repository.*;
 import com.smarttimetable.service.scheduler.SmartSchedulingEngine;
 import org.junit.jupiter.api.*;
@@ -12,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
 
