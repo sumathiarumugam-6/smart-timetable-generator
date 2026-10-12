@@ -49,6 +49,44 @@ public class ConflictResolver {
                 }
             }
         }
+
+        // Block-based resolution for laboratory blocks if conflicts still exist
+        if (chromosome.getHardConflictCount() > 0) {
+            Map<String, List<Gene>> labBlocks = new HashMap<>();
+            for (Gene g : genes) {
+                if (Boolean.TRUE.equals(g.getIsLabSession())) {
+                    String key = g.getBatchId() + "_" + g.getSubjectId();
+                    labBlocks.computeIfAbsent(key, k -> new ArrayList<>()).add(g);
+                }
+            }
+
+            for (List<Gene> block : labBlocks.values()) {
+                if (block.isEmpty()) continue;
+                DayOfWeekEnum originalDay = block.get(0).getDayOfWeek();
+
+                for (DayOfWeekEnum d : days) {
+                    if (d == originalDay) continue;
+                    for (Gene g : block) {
+                        g.setDayOfWeek(d);
+                    }
+
+                    Chromosome temp = new Chromosome(genes);
+                    constraintChecker.evaluateFitness(temp);
+
+                    if (temp.getHardConflictCount() < chromosome.getHardConflictCount()) {
+                        chromosome.setHardConflictCount(temp.getHardConflictCount());
+                        chromosome.setFitnessScore(temp.getFitnessScore());
+                        if (chromosome.getHardConflictCount() == 0) return;
+                        originalDay = d;
+                    } else {
+                        // Revert block
+                        for (Gene g : block) {
+                            g.setDayOfWeek(originalDay);
+                        }
+                    }
+                }
+            }
+        }
     }
 
     public boolean validateManualSwap(List<Gene> allEntries, Gene targetGene, DayOfWeekEnum newDay, int newPeriod, Long newClassroomId) {

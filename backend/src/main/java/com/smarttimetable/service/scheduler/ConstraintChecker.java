@@ -47,7 +47,7 @@ public class ConstraintChecker {
                 batchSlots.computeIfAbsent(bKey, k -> new ArrayList<>()).add(g);
             }
 
-            if (g.getBatchId() != null && g.getSubjectId() != null) {
+            if (g.getBatchId() != null && g.getSubjectId() != null && !Boolean.TRUE.equals(g.getIsLabSession())) {
                 String bsKey = g.getBatchId() + "_" + g.getSubjectId();
                 subjectDays.computeIfAbsent(bsKey, k -> new HashSet<>()).add(g.getDayOfWeek());
             }

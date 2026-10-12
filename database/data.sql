@@ -20,13 +20,14 @@ INSERT INTO departments (id, code, name, hod_name, building) VALUES
 (4, 'MECH', 'Mechanical Engineering', 'Dr. Marcus Vance', 'Newton Block'),
 (5, 'CIVIL', 'Civil Engineering', 'Dr. Elena Rostova', 'Visvesvaraya Hall');
 
--- 3. Insert Users (BCrypt Password for 'Password@123': $2a$10$8.UnVuG9HHgffUDAlk8qfOuVGkqRzgVymY0dqxs61LBLgUfR51aJ2)
+-- 3. Insert Users (BCrypt Password for 'Password@123': $2a$10$iJ5jnJVGlT9c5KM0Y41GLeumSLmBtUjeOtKhg8lUsSGKRwZJO2ati)
 INSERT INTO users (id, username, password, email, full_name, role_id, department_id) VALUES
-(1, 'superadmin', '$2a$10$8.UnVuG9HHgffUDAlk8qfOuVGkqRzgVymY0dqxs61LBLgUfR51aJ2', 'admin@enggcollege.edu', 'System Super Admin', 1, 1),
-(2, 'hod_cse', '$2a$10$8.UnVuG9HHgffUDAlk8qfOuVGkqRzgVymY0dqxs61LBLgUfR51aJ2', 'hod.cse@enggcollege.edu', 'Dr. Aris Thorne', 3, 1),
-(3, 'hod_ece', '$2a$10$8.UnVuG9HHgffUDAlk8qfOuVGkqRzgVymY0dqxs61LBLgUfR51aJ2', 'hod.ece@enggcollege.edu', 'Dr. Sarah Connor', 3, 2),
-(4, 'prof_john', '$2a$10$8.UnVuG9HHgffUDAlk8qfOuVGkqRzgVymY0dqxs61LBLgUfR51aJ2', 'john.doe@enggcollege.edu', 'Prof. John Doe', 4, 1),
-(5, 'prof_alice', '$2a$10$8.UnVuG9HHgffUDAlk8qfOuVGkqRzgVymY0dqxs61LBLgUfR51aJ2', 'alice.smith@enggcollege.edu', 'Prof. Alice Smith', 4, 1);
+(1, 'superadmin', '$2a$10$iJ5jnJVGlT9c5KM0Y41GLeumSLmBtUjeOtKhg8lUsSGKRwZJO2ati', 'admin@enggcollege.edu', 'System Super Admin', 1, 1),
+(2, 'hod_cse', '$2a$10$iJ5jnJVGlT9c5KM0Y41GLeumSLmBtUjeOtKhg8lUsSGKRwZJO2ati', 'hod.cse@enggcollege.edu', 'Dr. Aris Thorne', 3, 1),
+(3, 'hod_ece', '$2a$10$iJ5jnJVGlT9c5KM0Y41GLeumSLmBtUjeOtKhg8lUsSGKRwZJO2ati', 'hod.ece@enggcollege.edu', 'Dr. Sarah Connor', 3, 2),
+(4, 'prof_john', '$2a$10$iJ5jnJVGlT9c5KM0Y41GLeumSLmBtUjeOtKhg8lUsSGKRwZJO2ati', 'john.doe@enggcollege.edu', 'Prof. John Doe', 4, 1),
+(5, 'prof_alice', '$2a$10$iJ5jnJVGlT9c5KM0Y41GLeumSLmBtUjeOtKhg8lUsSGKRwZJO2ati', 'alice.smith@enggcollege.edu', 'Prof. Alice Smith', 4, 1),
+(6, 'admin', '$2a$10$iJ5jnJVGlT9c5KM0Y41GLeumSLmBtUjeOtKhg8lUsSGKRwZJO2ati', 'admin@timetable.edu', 'Administrator', 2, 1);
 
 -- 4. Insert Faculties
 INSERT INTO faculties (id, user_id, faculty_code, name, designation, department_id, email, phone, max_working_hours, current_workload) VALUES

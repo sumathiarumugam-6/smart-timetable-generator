@@ -73,7 +73,7 @@ public class GeneticAlgorithmScheduler {
             for (Gene t : template) {
                 Gene g = t.clone();
 
-                // Randomize Day and Period for initial variety (preserving lab blocks if applicable)
+                // Randomize Day and Period for initial variety (theory genes)
                 if (!Boolean.TRUE.equals(g.getIsLabSession())) {
                     g.setDayOfWeek(days[random.nextInt(days.length)]);
                     g.setPeriodNumber(random.nextInt(8) + 1);
@@ -81,6 +81,24 @@ public class GeneticAlgorithmScheduler {
 
                 genes.add(g);
             }
+
+            // For diverse initial population, randomize days of entire lab blocks across chromosomes
+            if (i > 0) {
+                Map<String, List<Gene>> labBlocks = new HashMap<>();
+                for (Gene g : genes) {
+                    if (Boolean.TRUE.equals(g.getIsLabSession())) {
+                        String key = g.getBatchId() + "_" + g.getSubjectId();
+                        labBlocks.computeIfAbsent(key, k -> new ArrayList<>()).add(g);
+                    }
+                }
+                for (List<Gene> block : labBlocks.values()) {
+                    DayOfWeekEnum newDay = days[random.nextInt(days.length)];
+                    for (Gene g : block) {
+                        g.setDayOfWeek(newDay);
+                    }
+                }
+            }
+
             population.add(new Chromosome(genes));
         }
         return population;
@@ -103,11 +121,22 @@ public class GeneticAlgorithmScheduler {
         List<Gene> g1 = p1.getGenes();
         List<Gene> g2 = p2.getGenes();
 
+        Map<String, Boolean> labBlockParentChoice = new HashMap<>();
+
         for (int i = 0; i < g1.size(); i++) {
-            if (random.nextBoolean()) {
-                offspringGenes.add(g1.get(i).clone());
+            Gene gene1 = g1.get(i);
+            Gene gene2 = g2.get(i);
+
+            if (Boolean.TRUE.equals(gene1.getIsLabSession())) {
+                String blockKey = gene1.getBatchId() + "_" + gene1.getSubjectId();
+                boolean fromP1 = labBlockParentChoice.computeIfAbsent(blockKey, k -> random.nextBoolean());
+                offspringGenes.add(fromP1 ? gene1.clone() : gene2.clone());
             } else {
-                offspringGenes.add(g2.get(i).clone());
+                if (random.nextBoolean()) {
+                    offspringGenes.add(gene1.clone());
+                } else {
+                    offspringGenes.add(gene2.clone());
+                }
             }
         }
 
@@ -118,10 +147,29 @@ public class GeneticAlgorithmScheduler {
         double mutationRate = 0.15;
         DayOfWeekEnum[] days = DayOfWeekEnum.values();
 
+        // 1. Mutate theory genes individually
         for (Gene g : chromosome.getGenes()) {
             if (random.nextDouble() < mutationRate && !Boolean.TRUE.equals(g.getIsLabSession())) {
                 g.setDayOfWeek(days[random.nextInt(days.length)]);
                 g.setPeriodNumber(random.nextInt(8) + 1);
+            }
+        }
+
+        // 2. Block-based mutation for lab sessions: shift the entire block (P5, P6, P7) to a new day together
+        Map<String, List<Gene>> labBlocks = new HashMap<>();
+        for (Gene g : chromosome.getGenes()) {
+            if (Boolean.TRUE.equals(g.getIsLabSession())) {
+                String key = g.getBatchId() + "_" + g.getSubjectId();
+                labBlocks.computeIfAbsent(key, k -> new ArrayList<>()).add(g);
+            }
+        }
+
+        for (List<Gene> block : labBlocks.values()) {
+            if (random.nextDouble() < mutationRate) {
+                DayOfWeekEnum newDay = days[random.nextInt(days.length)];
+                for (Gene g : block) {
+                    g.setDayOfWeek(newDay);
+                }
             }
         }
     }

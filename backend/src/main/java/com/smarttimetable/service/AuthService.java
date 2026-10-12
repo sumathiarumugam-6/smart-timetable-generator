@@ -32,69 +32,8 @@ public class AuthService {
 
     @PostConstruct
     public void initDefaultRolesAndUsers() {
-        try {
-            // Ensure roles exist
-            for (RoleName roleName : RoleName.values()) {
-                if (roleRepository.findByName(roleName).isEmpty()) {
-                    roleRepository.save(Role.builder().name(roleName).description(roleName.name()).build());
-                }
-            }
-
-            Role superAdminRole = roleRepository.findByName(RoleName.ROLE_SUPER_ADMIN).orElse(null);
-            Role hodRole = roleRepository.findByName(RoleName.ROLE_HOD).orElse(null);
-            Role facultyRole = roleRepository.findByName(RoleName.ROLE_FACULTY).orElse(null);
-
-            Department cse = departmentRepository.findByCode("CSE").orElseGet(() ->
-                    departmentRepository.save(Department.builder().code("CSE").name("Computer Science & Engineering").hodName("Dr. Aris Thorne").building("Turing Block").build())
-            );
-
-            // Auto-create/reset superadmin and admin with guaranteed password encoding
-            if (userRepository.findByUsername("superadmin").isEmpty()) {
-                userRepository.save(User.builder()
-                        .username("superadmin")
-                        .password(passwordEncoder.encode("Password@123"))
-                        .email("admin@enggcollege.edu")
-                        .fullName("System Super Admin")
-                        .role(superAdminRole)
-                        .department(cse)
-                        .build());
-            }
-
-            if (userRepository.findByUsername("admin").isEmpty()) {
-                userRepository.save(User.builder()
-                        .username("admin")
-                        .password(passwordEncoder.encode("Password@123"))
-                        .email("admin@timetable.edu")
-                        .fullName("Administrator")
-                        .role(superAdminRole)
-                        .department(cse)
-                        .build());
-            }
-
-            if (userRepository.findByUsername("hod_cse").isEmpty()) {
-                userRepository.save(User.builder()
-                        .username("hod_cse")
-                        .password(passwordEncoder.encode("Password@123"))
-                        .email("hod.cse@enggcollege.edu")
-                        .fullName("Dr. Aris Thorne")
-                        .role(hodRole)
-                        .department(cse)
-                        .build());
-            }
-
-            if (userRepository.findByUsername("prof_john").isEmpty()) {
-                userRepository.save(User.builder()
-                        .username("prof_john")
-                        .password(passwordEncoder.encode("Password@123"))
-                        .email("john.doe@enggcollege.edu")
-                        .fullName("Prof. John Doe")
-                        .role(facultyRole)
-                        .department(cse)
-                        .build());
-            }
-        } catch (Exception e) {
-            System.err.println("Init default users warning: " + e.getMessage());
-        }
+        // Initial roles, departments, users, faculty, classrooms, batches, and mappings
+        // are deterministically managed via data.sql to guarantee consistent IDs and prevent collisions.
     }
 
     public JwtResponse authenticateUser(LoginRequest loginRequest) {

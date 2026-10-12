@@ -172,7 +172,8 @@ public class SmartSchedulingEngine {
         }
 
         timetableEntryRepository.saveAll(entries);
-        timetable.setEntries(entries);
+        timetable.getEntries().clear();
+        timetable.getEntries().addAll(entries);
 
         return timetable;
     }
